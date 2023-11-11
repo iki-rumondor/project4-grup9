@@ -26,8 +26,13 @@ func main() {
 	auth_service := application.NewAuthService(auth_repo)
 	auth_handler := customHTTP.NewAuthHandler(auth_service)
 
+	products_repo := repository.NewProductsRepository(gormDB)
+	products_service := application.NewProductsService(products_repo)
+	products_handler := customHTTP.NewProductsHandler(products_service)
+
 	handlers := &customHTTP.Handlers{
-		AuthHandler: auth_handler,
+		AuthHandler:     auth_handler,
+		ProductsHandler: products_handler,
 	}
 
 	utils.NewCustomValidator(gormDB)
