@@ -32,3 +32,4 @@ type Product struct {
 
 	Transactions []MyTransaction `json:"transactions"`
 }
+

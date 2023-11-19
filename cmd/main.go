@@ -25,14 +25,24 @@ func main() {
 	auth_repo := repository.NewAuthRepository(gormDB)
 	auth_service := application.NewAuthService(auth_repo)
 	auth_handler := customHTTP.NewAuthHandler(auth_service)
+  
+	products_repo := repository.NewProductsRepository(gormDB)
+	products_service := application.NewProductsService(products_repo)
+	products_handler := customHTTP.NewProductsHandler(products_service)
+
+  categories_repo := repository.NewCategoriesRepository(gormDB)
+	categories_service := application.NewCategoriesService(categories_repo)
+	categories_handler := customHTTP.NewCategoriesHandler(categories_service)
 
 	transaction_repo := repository.NewTransactionRepository(gormDB)
 	transaction_service := application.NewTransactionService(transaction_repo)
 	transaction_handler := customHTTP.NewTransactionHandler(transaction_service)
 
 	handlers := &customHTTP.Handlers{
-		AuthHandler:        auth_handler,
-		TransactionHandler: transaction_handler,
+		AuthHandler:       auth_handler,
+		CategoriesHandler: categories_handler,
+    ProductsHandler: products_handler,
+    TransactionHandler: transaction_handler,
 	}
 
 	utils.NewCustomValidator(gormDB)
