@@ -3,11 +3,20 @@ package response
 import "time"
 
 type Products struct {
-	ID          uint      `gorm:"primaryKey" json:"id"`
-	Title       string    `json:"Title"`
-	Price       int       `json:"price"`
-	Stock       int       `json:"stock"`
-	Category_Id uint      `json:"category_id"`
-	Created_At  time.Time `json:"created_at"`
-	Updated_At  time.Time `json:"updated_at"`
+	ID            uint      `json:"id"`
+	Title         string    `json:"title"`
+	Price         int       `json:"price"`
+	Stock         int       `json:"stock"`
+	Categories_Id uint      `json:"categories_id"`
+	Created_At    time.Time `json:"created_at"`
+}
+
+type UpdateProducts struct {
+	ID            uint      `json:"id"`
+	Title         string    `json:"title"`
+	Price         int       `json:"price"`
+	Stock         int       `json:"stock"`
+	Categories_Id uint      `json:"categories_id"`
+	Created_At    time.Time `json:"created_at"`
+	Updated_At    time.Time `json:"updated_at"`
 }
