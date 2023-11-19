@@ -9,13 +9,15 @@ import (
 )
 
 type User struct {
-	ID       uint   `gorm:"primaryKey"`
-	Uuid     string `gorm:"not_null;varchar(120)"`
-	Username string `gorm:"unique;not_null;varchar(120)"`
-	Email    string `gorm:"unique;not_null;varchar(120)"`
-	Password string `gorm:"not_null;varchar(120)"`
-	RoleID   uint
-	Role     Role
+	ID          uint   `gorm:"primaryKey"`
+	Uuid        string `gorm:"not_null;varchar(120)"`
+	Username    string `gorm:"unique;not_null;varchar(120)"`
+	Email       string `gorm:"unique;not_null;varchar(120)"`
+	Password    string `gorm:"not_null;varchar(120)"`
+	RoleID      uint
+	Balance     int
+	Role        Role
+	Transaction []TransactionHistory
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
