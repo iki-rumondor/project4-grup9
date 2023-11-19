@@ -3,6 +3,6 @@
 DBHOST = "localhost"
 DBPORT = ""
 DBUSER = ""
-DBPASSWORD = "" 
-DBNAME = ""
+DBPASSWORD = ""
+DBNAME = "project4-grup9"
 SSLMODE = "disable"

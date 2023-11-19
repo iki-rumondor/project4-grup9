@@ -55,7 +55,7 @@ func (h *CategoriesHandler) CreateCategories(c *gin.Context) {
 		ID:                   result.ID,
 		Type:                 result.Type,
 		Sold_Product_Ammount: result.Sold_Product_Ammount,
-		Created_At:           result.Created_At,
+		Created_At:           result.CreatedAt,
 	}
 
 	c.JSON(http.StatusCreated, response)
@@ -79,12 +79,12 @@ func (h *CategoriesHandler) GetCategories(c *gin.Context) {
 
 		for _, product := range category.Product {
 			Products = append(Products, &response.ProductsCategories{
-				ID:         product.ID,
-				Title:      product.Title,
-				Price:      product.Price,
-				Stock:      product.Stock,
-				Created_At: product.Created_At,
-				Updated_At: product.Updated_At,
+				ID:        product.ID,
+				Title:     product.Title,
+				Price:     product.Price,
+				Stock:     product.Stock,
+				CreatedAt: product.CreatedAt,
+				UpdatedAt: product.UpdatedAt,
 			})
 		}
 
@@ -92,8 +92,8 @@ func (h *CategoriesHandler) GetCategories(c *gin.Context) {
 			ID:                   category.ID,
 			Type:                 category.Type,
 			Sold_Product_Ammount: category.Sold_Product_Ammount,
-			Created_At:           category.Created_At,
-			Updated_At:           category.Updated_At,
+			CreatedAt:            category.CreatedAt,
+			UpdatedAt:            category.UpdatedAt,
 			ProductsCategories:   Products,
 		})
 	}
@@ -143,11 +143,11 @@ func (h *CategoriesHandler) UpdateCategories(c *gin.Context) {
 		ID:                   result.ID,
 		Type:                 result.Type,
 		Sold_Product_Ammount: result.Sold_Product_Ammount,
-		Updated_At:           result.Updated_At,
+		UpdatedAt:            result.UpdatedAt,
 	})
 }
 
-func (h *CategoriesHandler) DeleteCategory(c *gin.Context) {
+func (h *CategoriesHandler) DeleteCategories(c *gin.Context) {
 
 	urlParam := c.Param("id")
 	categoryID, err := strconv.Atoi(urlParam)

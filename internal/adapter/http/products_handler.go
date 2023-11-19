@@ -41,10 +41,10 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 	}
 
 	product := domain.Products{
-		Title:       body.Title,
-		Price:       body.Price,
-		Stock:       body.Stock,
-		Category_Id: body.Categories_Id,
+		Title:      body.Title,
+		Price:      body.Price,
+		Stock:      body.Stock,
+		CategoryId: body.CategoryId,
 	}
 
 	result, err := h.Service.CreateProducts(&product)
@@ -63,12 +63,12 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 	}
 
 	response := response.Products{
-		ID:            result.ID,
-		Title:         result.Title,
-		Price:         result.Price,
-		Stock:         result.Stock,
-		Categories_Id: result.Category_Id,
-		Created_At:    result.Created_At,
+		ID:           result.ID,
+		Title:        result.Title,
+		Price:        result.Price,
+		Stock:        result.Stock,
+		CategoriesId: result.CategoryId,
+		CreatedAt:    result.CreatedAt,
 	}
 
 	c.JSON(http.StatusCreated, response)
@@ -88,12 +88,12 @@ func (h *ProductsHandler) GetProducts(c *gin.Context) {
 
 	for _, product := range *result {
 		products = append(products, &response.Products{
-			ID:            product.ID,
-			Title:         product.Title,
-			Price:         product.Price,
-			Stock:         product.Stock,
-			Categories_Id: product.Category_Id,
-			Created_At:    product.Created_At,
+			ID:           product.ID,
+			Title:        product.Title,
+			Price:        product.Price,
+			Stock:        product.Stock,
+			CategoriesId: product.CategoryId,
+			CreatedAt:    product.CreatedAt,
 		})
 	}
 	c.JSON(http.StatusOK, products)
@@ -125,11 +125,11 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	}
 
 	products := domain.Products{
-		ID:          uint(productsID),
-		Title:       body.Title,
-		Price:       body.Price,
-		Stock:       body.Stock,
-		Category_Id: body.Categories_Id,
+		ID:         uint(productsID),
+		Title:      body.Title,
+		Price:      body.Price,
+		Stock:      body.Stock,
+		CategoryId: body.CategoryId,
 	}
 
 	result, err := h.Service.UpdateProducts(&products)
@@ -148,13 +148,13 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response.UpdateProducts{
-		ID:            result.ID,
-		Title:         result.Title,
-		Price:         result.Price,
-		Stock:         result.Stock,
-		Categories_Id: result.Category_Id,
-		Created_At:    result.Created_At,
-		Updated_At:    result.Updated_At,
+		ID:           result.ID,
+		Title:        result.Title,
+		Price:        result.Price,
+		Stock:        result.Stock,
+		CategoriesId: result.CategoryId,
+		CreatedAt:    result.CreatedAt,
+		UpdatedAt:    result.UpdatedAt,
 	})
 }
 

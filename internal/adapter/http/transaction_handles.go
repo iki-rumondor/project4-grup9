@@ -40,8 +40,8 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 	}
 
 	transaction := domain.TransactionHistory{
-		Products_Id: body.Products_Id,
-		Quantity:    body.Quantity,
+		ProductsId: body.ProductsId,
+		Quantity:   body.Quantity,
 	}
 
 	result, err := h.Service.CreateTransaction(&transaction)
@@ -87,18 +87,18 @@ func (h *TransactionHandler) GetMyTransaction(c *gin.Context) {
 	for _, transactions := range *result {
 		transaction = append(transaction, &response.MyTransaction{
 			ID:          transactions.ID,
-			Products_Id: transactions.Products_Id,
-			User_Id:     transactions.User_Id,
+			ProductsId:  transactions.ProductsId,
+			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
 			Product: response.Product{
-				ID:            transactions.Products.ID,
-				Title:         transactions.Products.Title,
-				Price:         transactions.Products.Price,
-				Stock:         transactions.Products.Stock,
-				Categories_Id: transactions.Products.Category_Id,
-				Created_At:    transactions.Products.Created_At,
-				Updated_At:    transactions.Products.Updated_At,
+				ID:           transactions.Products.ID,
+				Title:        transactions.Products.Title,
+				Price:        transactions.Products.Price,
+				Stock:        transactions.Products.Stock,
+				CategoriesId: transactions.Products.CategoryId,
+				CreatedAt:    transactions.Products.CreatedAt,
+				UpdatedAt:    transactions.Products.UpdatedAt,
 			},
 		})
 	}
@@ -120,27 +120,27 @@ func (h *TransactionHandler) GetUserTransaction(c *gin.Context) {
 	for _, transactions := range *result {
 		transaction = append(transaction, &response.UserTransaction{
 			ID:          transactions.ID,
-			Products_Id: transactions.Products_Id,
-			User_Id:     transactions.User_Id,
+			ProductsId:  transactions.ProductsId,
+			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
 			Product: response.Product{
-				ID:            transactions.Products.ID,
-				Title:         transactions.Products.Title,
-				Price:         transactions.Products.Price,
-				Stock:         transactions.Products.Stock,
-				Categories_Id: transactions.Products.Category_Id,
-				Created_At:    transactions.Products.Created_At,
-				Updated_At:    transactions.Products.Updated_At,
+				ID:           transactions.Products.ID,
+				Title:        transactions.Products.Title,
+				Price:        transactions.Products.Price,
+				Stock:        transactions.Products.Stock,
+				CategoriesId: transactions.Products.CategoryId,
+				CreatedAt:    transactions.Products.CreatedAt,
+				UpdatedAt:    transactions.Products.UpdatedAt,
 			},
-			// Users: response.Users{
-			// 	ID:         transactions.User.ID,
-			// 	Email:      transactions.User.Email,
-			// 	Full_Name:  transactions.User.Username,
-			// 	Balance:    transactions.User.Balance,
-			// 	Created_At: transactions.User.CreatedAt,
-			// 	Update_At:  transactions.User.UpdatedAt,
-			// },
+			Users: response.Users{
+				ID:        transactions.User.ID,
+				Email:     transactions.User.Email,
+				FullName:  transactions.User.FullName,
+				Balance:   transactions.User.Balance,
+				CreatedAt: transactions.User.CreatedAt,
+				UpdatedAt: transactions.User.UpdatedAt,
+			},
 		})
 	}
 

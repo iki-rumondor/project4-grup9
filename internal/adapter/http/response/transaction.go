@@ -8,8 +8,8 @@ type TransactionBill struct {
 
 type MyTransaction struct {
 	ID          uint `json:"id"`
-	Products_Id uint `json:"products_id"`
-	User_Id     uint `json:"user_id"`
+	ProductsId  uint `json:"products_id"`
+	UserId      uint `json:"user_id"`
 	Quantity    int  `json:"quantity"`
 	Total_Price int  `json:"total_price"`
 	Product     Product
@@ -17,11 +17,11 @@ type MyTransaction struct {
 
 type UserTransaction struct {
 	ID          uint `json:"id"`
-	Products_Id uint `json:"products_id"`
-	User_Id     uint `json:"user_id"`
+	ProductsId  uint `json:"products_id"`
+	UserId      uint `json:"user_id"`
 	Quantity    int  `json:"quantity"`
 	Total_Price int  `json:"total_price"`
 
 	Product Product
-	// Users   Users
+	Users   Users
 }

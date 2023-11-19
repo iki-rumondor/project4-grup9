@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	gormDB, err := database.NewMysqlDB()
+	gormDB, err := database.NewPostgresDB()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
@@ -55,4 +55,12 @@ func autoMigration(db *gorm.DB) {
 	db.Migrator().DropTable(&domain.User{})
 	db.Migrator().CreateTable(&domain.User{})
 
+	db.Migrator().DropTable(&domain.Categories{})
+	db.Migrator().CreateTable(&domain.Categories{})
+
+	db.Migrator().DropTable(&domain.Products{})
+	db.Migrator().CreateTable(&domain.Products{})
+
+	db.Migrator().DropTable(&domain.TransactionHistory{})
+	db.Migrator().CreateTable(&domain.TransactionHistory{})
 }

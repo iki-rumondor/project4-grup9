@@ -4,12 +4,12 @@ import "time"
 
 type TransactionHistory struct {
 	ID          uint `gorm:"primaryKey"`
-	Products_Id uint
-	User_Id     uint
+	ProductsId  uint
+	UserId      uint
 	Quantity    int
 	Total_Price int
-	Created_At  time.Time
-	Updated_At  time.Time
-	Products    Products `gorm:"foreignKey:Products_Id"`
-	User        User     `gorm:"foreignKey:User_Id"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Products    Products `gorm:"foreignKey:ProductsId"`
+	User        User     `gorm:"foreignKey:UserId"`
 }
