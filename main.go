@@ -25,12 +25,12 @@ func main() {
 	auth_repo := repository.NewAuthRepository(gormDB)
 	auth_service := application.NewAuthService(auth_repo)
 	auth_handler := customHTTP.NewAuthHandler(auth_service)
-  
+
 	products_repo := repository.NewProductsRepository(gormDB)
 	products_service := application.NewProductsService(products_repo)
 	products_handler := customHTTP.NewProductsHandler(products_service)
 
-  categories_repo := repository.NewCategoriesRepository(gormDB)
+	categories_repo := repository.NewCategoriesRepository(gormDB)
 	categories_service := application.NewCategoriesService(categories_repo)
 	categories_handler := customHTTP.NewCategoriesHandler(categories_service)
 
@@ -39,10 +39,10 @@ func main() {
 	transaction_handler := customHTTP.NewTransactionHandler(transaction_service)
 
 	handlers := &customHTTP.Handlers{
-		AuthHandler:       auth_handler,
-		CategoriesHandler: categories_handler,
-    ProductsHandler: products_handler,
-    TransactionHandler: transaction_handler,
+		AuthHandler:        auth_handler,
+		CategoriesHandler:  categories_handler,
+		ProductsHandler:    products_handler,
+		TransactionHandler: transaction_handler,
 	}
 
 	utils.NewCustomValidator(gormDB)
@@ -52,19 +52,7 @@ func main() {
 
 func autoMigration(db *gorm.DB) {
 
-	db.Migrator().DropTable(&domain.Role{})
 	db.Migrator().DropTable(&domain.User{})
-	db.Migrator().CreateTable(&domain.Role{})
 	db.Migrator().CreateTable(&domain.User{})
 
-	roles := []domain.Role{
-		{
-			Name: "Admin",
-		},
-		{
-			Name: "User",
-		},
-	}
-
-	db.Create(&roles)
 }

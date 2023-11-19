@@ -133,14 +133,14 @@ func (h *TransactionHandler) GetUserTransaction(c *gin.Context) {
 				Created_At:    transactions.Products.Created_At,
 				Updated_At:    transactions.Products.Updated_At,
 			},
-			Users: response.Users{
-				ID:         transactions.User.ID,
-				Email:      transactions.User.Email,
-				Full_Name:  transactions.User.Username,
-				Balance:    transactions.User.Balance,
-				Created_At: transactions.User.CreatedAt,
-				Update_At:  transactions.User.UpdatedAt,
-			},
+			// Users: response.Users{
+			// 	ID:         transactions.User.ID,
+			// 	Email:      transactions.User.Email,
+			// 	Full_Name:  transactions.User.Username,
+			// 	Balance:    transactions.User.Balance,
+			// 	Created_At: transactions.User.CreatedAt,
+			// 	Update_At:  transactions.User.UpdatedAt,
+			// },
 		})
 	}
 

@@ -3,8 +3,6 @@ package application
 import (
 	"errors"
 
-	"github.com/google/uuid"
-	"github.com/iki-rumondor/init-golang-service/internal/adapter/http/request"
 	"github.com/iki-rumondor/init-golang-service/internal/domain"
 	"github.com/iki-rumondor/init-golang-service/internal/repository"
 	"github.com/iki-rumondor/init-golang-service/internal/utils"
@@ -20,20 +18,14 @@ func NewAuthService(repo repository.AuthRepository) *AuthService {
 	}
 }
 
-func (s *AuthService) CreateUser(request *request.Register) error {
-	user := &domain.User{
-		Uuid:     uuid.NewString(),
-		Username: request.Username,
-		Email:    request.Email,
-		Password: request.Password,
-		RoleID:   request.RoleID,
+func (s *AuthService) CreateUser(user *domain.User) (*domain.User, error) {
+
+	user, err := s.Repo.SaveUser(user)
+	if err != nil {
+		return nil, err
 	}
 
-	if err := s.Repo.SaveUser(user); err != nil{
-		return err
-	}
-
-	return nil
+	return user, nil
 }
 
 func (s *AuthService) VerifyUser(user *domain.User) (string, error) {
@@ -49,7 +41,6 @@ func (s *AuthService) VerifyUser(user *domain.User) (string, error) {
 
 	data := map[string]interface{}{
 		"id":   result.ID,
-		"role": result.RoleID,
 	}
 
 	jwt, err := utils.GenerateToken(data)
@@ -60,13 +51,23 @@ func (s *AuthService) VerifyUser(user *domain.User) (string, error) {
 	return jwt, nil
 }
 
-func (s *AuthService) GetUsers() (*[]domain.User, error) {
+func (s *AuthService) UpdateBalance(user *domain.User) (*domain.User, error) {
 
-	users, err := s.Repo.FindUsers()
-	
+	before, err := s.Repo.FindByID(user.ID)
 	if err != nil{
 		return nil, err
 	}
 
-	return users, nil
+	user.Balance += before.Balance
+	
+	if err := s.Repo.UpdateBalance(user); err != nil {
+		return nil, err
+	}
+	
+	after, err := s.Repo.FindByID(user.ID)
+	if err != nil{
+		return nil, err
+	}
+
+	return after, nil
 }

@@ -23,5 +23,5 @@ type UserTransaction struct {
 	Total_Price int  `json:"total_price"`
 
 	Product Product
-	Users   Users
+	// Users   Users
 }
