@@ -11,4 +11,5 @@ type Products struct {
 	Created_At    time.Time
 	Updated_At    time.Time
 	Categories    Categories
+
 }
