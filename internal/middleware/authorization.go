@@ -29,8 +29,8 @@ func IsAdmin() gin.HandlerFunc {
 			return
 		}
 
-		role := mapClaims["role"].(float64)
-		if role != 1 {
+		role := mapClaims["role"].(string)
+		if role != "admin" {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 				Success: false,
 				Message: "access denied due to invalid credentials",
