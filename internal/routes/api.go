@@ -21,8 +21,8 @@ func StartServer(handlers *customHTTP.Handlers) *gin.Engine {
 
 		user.GET("/products", handlers.ProductsHandler.GetProducts)
 
-		user.POST("/transactions", handlers.TransactionHandler.CreateTransaction)
-		user.GET("/transactions/my-transactions", handlers.TransactionHandler.GetMyTransaction)
+		user.POST("/transactions", middleware.SetUserID(), handlers.TransactionHandler.CreateTransaction)
+		user.GET("/transactions/my-transactions", middleware.SetUserID(), handlers.TransactionHandler.GetMyTransaction)
 	}
 
 	admin := router.Group("").Use(middleware.IsValidJWT(), middleware.IsAdmin())

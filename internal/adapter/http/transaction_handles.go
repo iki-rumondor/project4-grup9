@@ -42,9 +42,10 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 	transaction := domain.TransactionHistory{
 		ProductsId: body.ProductsId,
 		Quantity:   body.Quantity,
+		UserId: c.GetUint("user_id"),
 	}
 
-	result, err := h.Service.CreateTransaction(&transaction)
+	res, err := h.Service.CreateTransaction(&transaction)
 	if err != nil {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -59,17 +60,9 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 		return
 	}
 
-	response := response.TransactionBill{
-		Total_Price:    result.Total_Price,
-		Quantity:       result.Quantity,
-		Products_Title: result.Products.Title,
-	}
-
-	successMessage := "You have successfully purchased the product"
-
 	c.JSON(http.StatusCreated, gin.H{
-		"message":          successMessage,
-		"transaction_bill": response,
+		"message":          "You have successfully purchased the product",
+		"transaction_bill": res,
 	})
 }
 
@@ -91,7 +84,7 @@ func (h *TransactionHandler) GetMyTransaction(c *gin.Context) {
 			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
-			Product: response.Product{
+			Product: response.TransactionProduct{
 				ID:           transactions.Products.ID,
 				Title:        transactions.Products.Title,
 				Price:        transactions.Products.Price,
@@ -124,7 +117,7 @@ func (h *TransactionHandler) GetUserTransaction(c *gin.Context) {
 			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
-			Product: response.Product{
+			Product: response.TransactionProduct{
 				ID:           transactions.Products.ID,
 				Title:        transactions.Products.Title,
 				Price:        transactions.Products.Price,
@@ -133,7 +126,7 @@ func (h *TransactionHandler) GetUserTransaction(c *gin.Context) {
 				CreatedAt:    transactions.Products.CreatedAt,
 				UpdatedAt:    transactions.Products.UpdatedAt,
 			},
-			Users: response.Users{
+			Users: response.TransactionUser{
 				ID:        transactions.User.ID,
 				Email:     transactions.User.Email,
 				FullName:  transactions.User.FullName,

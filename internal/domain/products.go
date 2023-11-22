@@ -19,7 +19,7 @@ type Products struct {
 	Transaction  []TransactionHistory
 }
 
-func (m *Products) BeforeSave(tx *gorm.DB) error {
+func (m *Products) BeforeCreate(tx *gorm.DB) error {
 
 	if err := tx.First(&Categories{}, "id = ?", m.CategoriesID).Error; err != nil {
 		return fmt.Errorf("categories with id %d is not found", m.CategoriesID)

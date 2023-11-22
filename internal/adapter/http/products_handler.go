@@ -153,7 +153,7 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, response.UpdateProducts{
 		ID:           result.ID,
 		Title:        result.Title,
-		Price:        result.Price,
+		Price:        fmt.Sprintf("Rp.%d", result.Price),
 		Stock:        result.Stock,
 		CategoriesID: result.CategoriesID,
 		CreatedAt:    result.CreatedAt,
