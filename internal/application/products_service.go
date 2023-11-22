@@ -24,8 +24,8 @@ func (s *ProductsService) CreateProducts(products *domain.Products) (*domain.Pro
 	return result, nil
 }
 
-func (s *ProductsService) GetProducts(productsID uint) (*[]domain.Products, error) {
-	products, err := s.Repo.FindProducts(productsID)
+func (s *ProductsService) GetProducts() (*[]domain.Products, error) {
+	products, err := s.Repo.FindProducts()
 	if err != nil {
 		return nil, err
 	}

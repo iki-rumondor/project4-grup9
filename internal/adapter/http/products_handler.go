@@ -2,6 +2,7 @@ package customHTTP
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -41,9 +42,9 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 	}
 
 	product := domain.Products{
-		Title:      body.Title,
-		Price:      body.Price,
-		Stock:      body.Stock,
+		Title:        body.Title,
+		Price:        body.Price,
+		Stock:        body.Stock,
 		CategoriesID: body.CategoriesID,
 	}
 
@@ -52,8 +53,9 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
-				Message: err.Error(),
+				Message: fmt.Sprintf("category with ID %d is is not found", body.CategoriesID),
 			})
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
@@ -75,8 +77,8 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 }
 
 func (h *ProductsHandler) GetProducts(c *gin.Context) {
-	productID := c.GetUint("productID")
-	result, err := h.Service.GetProducts(productID)
+	
+	result, err := h.Service.GetProducts()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Message: err.Error(),
@@ -125,10 +127,10 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	}
 
 	products := domain.Products{
-		ID:         uint(productsID),
-		Title:      body.Title,
-		Price:      body.Price,
-		Stock:      body.Stock,
+		ID:           uint(productsID),
+		Title:        body.Title,
+		Price:        body.Price,
+		Stock:        body.Stock,
 		CategoriesID: body.CategoriesID,
 	}
 
@@ -139,6 +141,7 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
 				Message: err.Error(),
 			})
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
@@ -173,6 +176,14 @@ func (h *ProductsHandler) DeleteProducts(c *gin.Context) {
 	}
 
 	if err := h.Service.DeleteProducts(&product); err != nil {
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
+				Message: err.Error(),
+			})
+			return
+		}
+
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Message: err.Error(),
 		})
@@ -180,6 +191,6 @@ func (h *ProductsHandler) DeleteProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response.Message{
-		Message: "Category has been successfully deleted",
+		Message: "Product has been successfully deleted",
 	})
 }

@@ -25,7 +25,7 @@ func IsValidJWT() gin.HandlerFunc {
 		
 		mapClaims, err := utils.VerifyToken(jwt)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.Message{
 				Message: err.Error(),
 			})
 			return

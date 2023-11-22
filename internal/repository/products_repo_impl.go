@@ -22,9 +22,9 @@ func (r *ProductsRepoImplementation) CreateProducts(products *domain.Products) (
 	return products, nil
 }
 
-func (r *ProductsRepoImplementation) FindProducts(productsID uint) (*[]domain.Products, error) {
+func (r *ProductsRepoImplementation) FindProducts() (*[]domain.Products, error) {
 	var products []domain.Products
-	if err := r.db.Find(&products, "id = ?", productsID).Error; err != nil {
+	if err := r.db.Find(&products).Error; err != nil {
 		return nil, err
 	}
 

@@ -34,12 +34,11 @@ func (r *AuthRepoImplementation) FindByID(id uint) (*domain.User, error) {
 }
 
 func (r *AuthRepoImplementation) SaveUser(user *domain.User) (*domain.User, error) {
-	var result domain.User
-	if err := r.db.Save(user).First(&result).Error; err != nil {
+	if err := r.db.Save(user).Error; err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return user, nil
 }
 
 func (r *AuthRepoImplementation) UpdateBalance(user *domain.User) error {
