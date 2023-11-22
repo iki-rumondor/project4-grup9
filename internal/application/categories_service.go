@@ -1,8 +1,6 @@
 package application
 
 import (
-	"errors"
-
 	"github.com/iki-rumondor/init-golang-service/internal/domain"
 	"github.com/iki-rumondor/init-golang-service/internal/repository"
 )
@@ -20,7 +18,7 @@ func NewCategoriesService(repo repository.CategoriesRepository) *CategoriesServi
 func (s *CategoriesService) CreateCategories(categories *domain.Categories) (*domain.Categories, error) {
 	result, err := s.Repo.CreateCategories(categories)
 	if err != nil {
-		return nil, errors.New("failed to save category into database")
+		return nil, err
 	}
 
 	return result, nil
@@ -29,7 +27,7 @@ func (s *CategoriesService) CreateCategories(categories *domain.Categories) (*do
 func (s *CategoriesService) GetCategories() (*[]domain.Categories, error) {
 	categorie, err := s.Repo.FindCategories()
 	if err != nil {
-		return nil, errors.New("failed to get task category from database")
+		return nil, err
 	}
 
 	return categorie, nil
@@ -47,7 +45,7 @@ func (s *CategoriesService) UpdateCategories(categories *domain.Categories) (*do
 
 	categories, err := s.Repo.UpdateCategories(categories)
 	if err != nil {
-		return nil, errors.New("failed to update category to database")
+		return nil, err
 	}
 
 	return categories, nil
@@ -64,7 +62,7 @@ func (s *CategoriesService) DeleteCategories(categories *domain.Categories) erro
 	// }
 
 	if err := s.Repo.DeleteCategories(categories); err != nil {
-		return errors.New("we encountered an issue while trying to delete the category")
+		return err
 	}
 
 	return nil

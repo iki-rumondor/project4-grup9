@@ -7,7 +7,7 @@ type Products struct {
 	Title        string    `json:"title"`
 	Price        int       `json:"price"`
 	Stock        int       `json:"stock"`
-	CategoriesId uint      `json:"categories_id"`
+	CategoriesID uint      `json:"categories_id"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 
@@ -16,7 +16,7 @@ type UpdateProducts struct {
 	Title        string    `json:"title"`
 	Price        int       `json:"price"`
 	Stock        int       `json:"stock"`
-	CategoriesId uint      `json:"categories_id"`
+	CategoriesID uint      `json:"categories_id"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 }
@@ -26,7 +26,7 @@ type Product struct {
 	Title        string    `json:"title"`
 	Price        int       `json:"price"`
 	Stock        int       `json:"stock"`
-	CategoriesId uint      `json:"categories_id"`
+	CategoriesID uint      `json:"categories_id"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 

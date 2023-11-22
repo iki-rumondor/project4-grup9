@@ -44,7 +44,7 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 		Title:      body.Title,
 		Price:      body.Price,
 		Stock:      body.Stock,
-		CategoryId: body.CategoryId,
+		CategoriesID: body.CategoriesID,
 	}
 
 	result, err := h.Service.CreateProducts(&product)
@@ -67,7 +67,7 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 		Title:        result.Title,
 		Price:        result.Price,
 		Stock:        result.Stock,
-		CategoriesId: result.CategoryId,
+		CategoriesID: result.CategoriesID,
 		CreatedAt:    result.CreatedAt,
 	}
 
@@ -92,7 +92,7 @@ func (h *ProductsHandler) GetProducts(c *gin.Context) {
 			Title:        product.Title,
 			Price:        product.Price,
 			Stock:        product.Stock,
-			CategoriesId: product.CategoryId,
+			CategoriesID: product.CategoriesID,
 			CreatedAt:    product.CreatedAt,
 		})
 	}
@@ -129,7 +129,7 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 		Title:      body.Title,
 		Price:      body.Price,
 		Stock:      body.Stock,
-		CategoryId: body.CategoryId,
+		CategoriesID: body.CategoriesID,
 	}
 
 	result, err := h.Service.UpdateProducts(&products)
@@ -152,7 +152,7 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 		Title:        result.Title,
 		Price:        result.Price,
 		Stock:        result.Stock,
-		CategoriesId: result.CategoryId,
+		CategoriesID: result.CategoriesID,
 		CreatedAt:    result.CreatedAt,
 		UpdatedAt:    result.UpdatedAt,
 	})

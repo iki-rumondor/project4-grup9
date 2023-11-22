@@ -1,6 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Categories struct {
 	ID                   uint   `gorm:"primaryKey"`
@@ -8,5 +12,25 @@ type Categories struct {
 	Sold_Product_Ammount int
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
-	Product              []Products `gorm:"foreignKey:CategoryId"`
+	Products             []Products
 }
+
+func (m *Categories) BeforeUpdate(tx *gorm.DB) error {
+
+	if err := tx.First(Categories{}, "id = ?", m.ID).Error; err != nil{
+		return err
+	}
+
+	return nil
+}
+
+func (m *Categories) BeforeDelete(tx *gorm.DB) error {
+
+	if err := tx.First(Categories{}, "id = ?", m.ID).Error; err != nil{
+		return err
+	}
+
+	return nil
+}
+
+

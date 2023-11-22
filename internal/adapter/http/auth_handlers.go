@@ -140,6 +140,7 @@ func (h *AuthHandler) Topup(c *gin.Context) {
 				Success: false,
 				Message: err.Error(),
 			})
+			return
 		}
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Success: false,

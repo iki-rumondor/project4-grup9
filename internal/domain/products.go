@@ -7,9 +7,9 @@ type Products struct {
 	Title       string `gorm:"not_null;varchar(120)"`
 	Price       int
 	Stock       int
-	CategoryId  uint
+	CategoriesID  uint
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	Categories  Categories `gorm:"foreignKey:CategoryId"`
+	Categories  Categories
 	Transaction []TransactionHistory
 }

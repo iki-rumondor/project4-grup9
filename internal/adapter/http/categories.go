@@ -1,6 +1,7 @@
 package customHTTP
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/iki-rumondor/init-golang-service/internal/adapter/http/response"
 	"github.com/iki-rumondor/init-golang-service/internal/application"
 	"github.com/iki-rumondor/init-golang-service/internal/domain"
+	"gorm.io/gorm"
 )
 
 type CategoriesHandler struct {
@@ -77,7 +79,7 @@ func (h *CategoriesHandler) GetCategories(c *gin.Context) {
 
 		var Products = []*response.ProductsCategories{}
 
-		for _, product := range category.Product {
+		for _, product := range category.Products {
 			Products = append(Products, &response.ProductsCategories{
 				ID:        product.ID,
 				Title:     product.Title,
@@ -133,7 +135,15 @@ func (h *CategoriesHandler) UpdateCategories(c *gin.Context) {
 
 	result, err := h.Service.UpdateCategories(&categories)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
+				Success: false,
+				Message: err.Error(),
+			})
+			return
+		}
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			Success: false,
 			Message: err.Error(),
 		})
 		return
@@ -163,6 +173,14 @@ func (h *CategoriesHandler) DeleteCategories(c *gin.Context) {
 	}
 
 	if err := h.Service.DeleteCategories(&category); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
+				Success: false,
+				Message: err.Error(),
+			})
+			return
+		}
+
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Message: err.Error(),
 		})
