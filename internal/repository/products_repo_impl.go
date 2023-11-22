@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/iki-rumondor/init-golang-service/internal/domain"
 	"gorm.io/gorm"
 )
@@ -22,9 +24,9 @@ func (r *ProductsRepoImplementation) CreateProducts(products *domain.Products) (
 	return products, nil
 }
 
-func (r *ProductsRepoImplementation) FindProducts(productsID uint) (*[]domain.Products, error) {
+func (r *ProductsRepoImplementation) FindProducts() (*[]domain.Products, error) {
 	var products []domain.Products
-	if err := r.db.Find(&products, "id = ?", productsID).Error; err != nil {
+	if err := r.db.Find(&products).Error; err != nil {
 		return nil, err
 	}
 
@@ -32,6 +34,10 @@ func (r *ProductsRepoImplementation) FindProducts(productsID uint) (*[]domain.Pr
 }
 
 func (r *ProductsRepoImplementation) UpdateProducts(products *domain.Products) (*domain.Products, error) {
+	if err := r.db.First(&domain.Categories{}, "id = ?", products.CategoriesID).Error; err != nil {
+		return nil, fmt.Errorf("categories with id %d is not found", products.CategoriesID)
+	}
+
 	var result domain.Products
 	if err := r.db.Model(products).Updates(products).First(&result).Error; err != nil {
 		return nil, err

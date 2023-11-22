@@ -1,15 +1,42 @@
 package domain
 
-import "time"
+import (
+	"fmt"
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type TransactionHistory struct {
 	ID          uint `gorm:"primaryKey"`
-	Products_Id uint
-	User_Id     uint
-	Quantity    int
-	Total_Price int
-	Created_At  time.Time
-	Updated_At  time.Time
-	Products    Products `gorm:"foreignKey:Products_Id"`
-	User        User     `gorm:"foreignKey:User_Id"`
+	ProductsId  uint
+	UserId      uint
+	Quantity    uint
+	Total_Price uint
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Products    Products `gorm:"foreignKey:ProductsId"`
+	User        User     `gorm:"foreignKey:UserId"`
+}
+
+func (m *TransactionHistory) BeforeSave(tx *gorm.DB) error {
+
+	if err := tx.First(&Products{}, "id = ?", m.ProductsId).Error; err != nil {
+		return fmt.Errorf("product with id %d is not found", m.ProductsId)
+	}
+
+	if err := tx.First(&User{}, "id = ?", m.UserId).Error; err != nil {
+		return fmt.Errorf("user with id %d is not found", m.UserId)
+	}
+
+	return nil
+}
+
+func (m *TransactionHistory) BeforeDelete(tx *gorm.DB) error {
+
+	if err := tx.First(&TransactionHistory{}, "id = ?", m.ID).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

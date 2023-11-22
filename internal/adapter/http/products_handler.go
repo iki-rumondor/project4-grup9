@@ -2,6 +2,7 @@ package customHTTP
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -41,10 +42,10 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 	}
 
 	product := domain.Products{
-		Title:         body.Title,
-		Price:         body.Price,
-		Stock:         body.Stock,
-		Categories_Id: body.Categories_Id,
+		Title:        body.Title,
+		Price:        body.Price,
+		Stock:        body.Stock,
+		CategoriesID: body.CategoriesID,
 	}
 
 	result, err := h.Service.CreateProducts(&product)
@@ -52,8 +53,9 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
-				Message: err.Error(),
+				Message: fmt.Sprintf("category with ID %d is is not found", body.CategoriesID),
 			})
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
@@ -63,20 +65,20 @@ func (h *ProductsHandler) CreateProducts(c *gin.Context) {
 	}
 
 	response := response.Products{
-		ID:            result.ID,
-		Title:         result.Title,
-		Price:         result.Price,
-		Stock:         result.Stock,
-		Categories_Id: result.Categories_Id,
-		Created_At:    result.Created_At,
+		ID:           result.ID,
+		Title:        result.Title,
+		Price:        result.Price,
+		Stock:        result.Stock,
+		CategoriesID: result.CategoriesID,
+		CreatedAt:    result.CreatedAt,
 	}
 
 	c.JSON(http.StatusCreated, response)
 }
 
 func (h *ProductsHandler) GetProducts(c *gin.Context) {
-	productID := c.GetUint("productID")
-	result, err := h.Service.GetProducts(productID)
+	
+	result, err := h.Service.GetProducts()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Message: err.Error(),
@@ -88,12 +90,12 @@ func (h *ProductsHandler) GetProducts(c *gin.Context) {
 
 	for _, product := range *result {
 		products = append(products, &response.Products{
-			ID:            product.ID,
-			Title:         product.Title,
-			Price:         product.Price,
-			Stock:         product.Stock,
-			Categories_Id: product.Categories_Id,
-			Created_At:    product.Created_At,
+			ID:           product.ID,
+			Title:        product.Title,
+			Price:        product.Price,
+			Stock:        product.Stock,
+			CategoriesID: product.CategoriesID,
+			CreatedAt:    product.CreatedAt,
 		})
 	}
 	c.JSON(http.StatusOK, products)
@@ -125,11 +127,11 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	}
 
 	products := domain.Products{
-		ID:            uint(productsID),
-		Title:         body.Title,
-		Price:         body.Price,
-		Stock:         body.Stock,
-		Categories_Id: body.Categories_Id,
+		ID:           uint(productsID),
+		Title:        body.Title,
+		Price:        body.Price,
+		Stock:        body.Stock,
+		CategoriesID: body.CategoriesID,
 	}
 
 	result, err := h.Service.UpdateProducts(&products)
@@ -139,6 +141,7 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
 				Message: err.Error(),
 			})
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
@@ -148,13 +151,13 @@ func (h *ProductsHandler) UpdateProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response.UpdateProducts{
-		ID:            result.ID,
-		Title:         result.Title,
-		Price:         result.Price,
-		Stock:         result.Stock,
-		Categories_Id: result.Categories_Id,
-		Created_At:    result.Created_At,
-		Updated_At:    result.Updated_At,
+		ID:           result.ID,
+		Title:        result.Title,
+		Price:        fmt.Sprintf("Rp.%d", result.Price),
+		Stock:        result.Stock,
+		CategoriesID: result.CategoriesID,
+		CreatedAt:    result.CreatedAt,
+		UpdatedAt:    result.UpdatedAt,
 	})
 }
 
@@ -173,6 +176,14 @@ func (h *ProductsHandler) DeleteProducts(c *gin.Context) {
 	}
 
 	if err := h.Service.DeleteProducts(&product); err != nil {
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, response.Message{
+				Message: err.Error(),
+			})
+			return
+		}
+
 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
 			Message: err.Error(),
 		})
@@ -180,6 +191,6 @@ func (h *ProductsHandler) DeleteProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response.Message{
-		Message: "Category has been successfully deleted",
+		Message: "Product has been successfully deleted",
 	})
 }

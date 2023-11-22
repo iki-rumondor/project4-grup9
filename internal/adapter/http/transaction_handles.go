@@ -40,11 +40,12 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 	}
 
 	transaction := domain.TransactionHistory{
-		Products_Id: body.Products_Id,
-		Quantity:    body.Quantity,
+		ProductsId: body.ProductsId,
+		Quantity:   body.Quantity,
+		UserId: c.GetUint("user_id"),
 	}
 
-	result, err := h.Service.CreateTransaction(&transaction)
+	res, err := h.Service.CreateTransaction(&transaction)
 	if err != nil {
 
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -59,17 +60,9 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 		return
 	}
 
-	response := response.TransactionBill{
-		Total_Price:    result.Total_Price,
-		Quantity:       result.Quantity,
-		Products_Title: result.Products.Title,
-	}
-
-	successMessage := "You have successfully purchased the product"
-
 	c.JSON(http.StatusCreated, gin.H{
-		"message":          successMessage,
-		"transaction_bill": response,
+		"message":          "You have successfully purchased the product",
+		"transaction_bill": res,
 	})
 }
 
@@ -87,18 +80,18 @@ func (h *TransactionHandler) GetMyTransaction(c *gin.Context) {
 	for _, transactions := range *result {
 		transaction = append(transaction, &response.MyTransaction{
 			ID:          transactions.ID,
-			Products_Id: transactions.Products_Id,
-			User_Id:     transactions.User_Id,
+			ProductsId:  transactions.ProductsId,
+			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
-			Product: response.Product{
-				ID:            transactions.Products.ID,
-				Title:         transactions.Products.Title,
-				Price:         transactions.Products.Price,
-				Stock:         transactions.Products.Stock,
-				Categories_Id: transactions.Products.Category_Id,
-				Created_At:    transactions.Products.Created_At,
-				Updated_At:    transactions.Products.Updated_At,
+			Product: response.TransactionProduct{
+				ID:           transactions.Products.ID,
+				Title:        transactions.Products.Title,
+				Price:        transactions.Products.Price,
+				Stock:        transactions.Products.Stock,
+				CategoriesID: transactions.Products.CategoriesID,
+				CreatedAt:    transactions.Products.CreatedAt,
+				UpdatedAt:    transactions.Products.UpdatedAt,
 			},
 		})
 	}
@@ -120,26 +113,26 @@ func (h *TransactionHandler) GetUserTransaction(c *gin.Context) {
 	for _, transactions := range *result {
 		transaction = append(transaction, &response.UserTransaction{
 			ID:          transactions.ID,
-			Products_Id: transactions.Products_Id,
-			User_Id:     transactions.User_Id,
+			ProductsId:  transactions.ProductsId,
+			UserId:      transactions.UserId,
 			Quantity:    transactions.Quantity,
 			Total_Price: transactions.Total_Price,
-			Product: response.Product{
-				ID:            transactions.Products.ID,
-				Title:         transactions.Products.Title,
-				Price:         transactions.Products.Price,
-				Stock:         transactions.Products.Stock,
-				Categories_Id: transactions.Products.Category_Id,
-				Created_At:    transactions.Products.Created_At,
-				Updated_At:    transactions.Products.Updated_At,
+			Product: response.TransactionProduct{
+				ID:           transactions.Products.ID,
+				Title:        transactions.Products.Title,
+				Price:        transactions.Products.Price,
+				Stock:        transactions.Products.Stock,
+				CategoriesID: transactions.Products.CategoriesID,
+				CreatedAt:    transactions.Products.CreatedAt,
+				UpdatedAt:    transactions.Products.UpdatedAt,
 			},
-			Users: response.Users{
-				ID:         transactions.User.ID,
-				Email:      transactions.User.Email,
-				Full_Name:  transactions.User.Username,
-				Balance:    transactions.User.Balance,
-				Created_At: transactions.User.CreatedAt,
-				Update_At:  transactions.User.UpdatedAt,
+			Users: response.TransactionUser{
+				ID:        transactions.User.ID,
+				Email:     transactions.User.Email,
+				FullName:  transactions.User.FullName,
+				Balance:   transactions.User.Balance,
+				CreatedAt: transactions.User.CreatedAt,
+				UpdatedAt: transactions.User.UpdatedAt,
 			},
 		})
 	}
