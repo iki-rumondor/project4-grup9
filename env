@@ -1,8 +1,0 @@
-# DATABASE INFORMATION
-
-DBHOST = "localhost"
-DBPORT = ""
-DBUSER = ""
-DBPASSWORD = ""
-DBNAME = "project4-grup9"
-SSLMODE = "disable"
