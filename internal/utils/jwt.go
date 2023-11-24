@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var secretKey = "mostSecrett"
+var secretKey = "project4Key"
 
 func GenerateToken(data map[string]interface{}) (string, error) {
 	claims := jwt.MapClaims(data)

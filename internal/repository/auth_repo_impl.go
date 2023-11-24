@@ -24,17 +24,25 @@ func (r *AuthRepoImplementation) FindByEmail(email string) (*domain.User, error)
 	return &user, nil
 }
 
-func (r *AuthRepoImplementation) FindUsers() (*[]domain.User, error) {
-	var users []domain.User
-	if err := r.db.Preload("Role").Find(&users).Error; err != nil {
+func (r *AuthRepoImplementation) FindByID(id uint) (*domain.User, error) {
+	var user domain.User
+	if err := r.db.First(&user, "id = ?", id).Error; err != nil {
 		return nil, err
 	}
 
-	return &users, nil
+	return &user, nil
 }
 
-func (r *AuthRepoImplementation) SaveUser(user *domain.User) error {
+func (r *AuthRepoImplementation) SaveUser(user *domain.User) (*domain.User, error) {
 	if err := r.db.Save(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (r *AuthRepoImplementation) UpdateBalance(user *domain.User) error {
+	if err := r.db.Model(&domain.User{}).Where("id = ?", user.ID).Update("balance", user.Balance).Error; err != nil {
 		return err
 	}
 
