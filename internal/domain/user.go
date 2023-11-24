@@ -15,7 +15,6 @@ type User struct {
 	Password    string `gorm:"not_null;varchar(120)"`
 	Role      	string `gorm:"not_null;varchar(10)"`
 	Balance     uint
-	// Transaction []TransactionHistory
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

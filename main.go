@@ -14,13 +14,13 @@ import (
 )
 
 func main() {
-	gormDB, err := database.NewMysqlDB()
+	gormDB, err := database.NewPostgresDB()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
 
-	// autoMigration(gormDB)
+	autoMigration(gormDB)
 
 	auth_repo := repository.NewAuthRepository(gormDB)
 	auth_service := application.NewAuthService(auth_repo)
