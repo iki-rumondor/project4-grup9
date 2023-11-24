@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 
-	autoMigration(gormDB)
+	// autoMigration(gormDB)
 
 	auth_repo := repository.NewAuthRepository(gormDB)
 	auth_service := application.NewAuthService(auth_repo)
