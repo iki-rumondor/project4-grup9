@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/iki-rumondor/init-golang-service/internal/adapter/database"
 	customHTTP "github.com/iki-rumondor/init-golang-service/internal/adapter/http"
@@ -46,8 +47,15 @@ func main() {
 	}
 
 	utils.NewCustomValidator(gormDB)
-	var PORT = ":8080"
+	var PORT = envPortOr("3000")
 	routes.StartServer(handlers).Run(PORT)
+}
+
+func envPortOr(port string) string {
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		return ":" + envPort
+	}
+	return ":" + port
 }
 
 func autoMigration(db *gorm.DB) {
